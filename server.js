@@ -1,10 +1,16 @@
 const path = require('path');
+const cookieParser = require('cookie-parser')
 const express = require('express');
 const app = express();
 
-// app.use(express.static(path.join(__dirname, 'client')));
+// Use middleware to parse the cookie header (https://www.npmjs.com/package/cookie-parser)
+app.use(cookieParser());
 
 app.get('/', (req, res) => {
+  console.log('cookies', req.cookies);
+  res.cookie('SESSION_COOKIE', 'sessionCookie');
+  res.cookie('PERMANENT_COOKIE', 'permanentCookie', { expires: new Date(Date.now() + 60000) });
+  res.cookie('HTTP_ONLY_COOKIE', 'httpOnlyCookie', { expires: new Date(Date.now() + 60000), httpOnly: true });
   res.sendFile(path.join(__dirname, 'client', 'index.html'));
 });
 
